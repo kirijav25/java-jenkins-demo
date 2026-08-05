@@ -1,7 +1,15 @@
-package com.example.demo;
-
+@SpringBootApplication
 public class DemoApplication {
     public static void main(String[] args) {
-        System.out.println("Hello Jenkins Pipeline");
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+
+@RestController
+public class HelloController {
+
+    @GetMapping("/")
+    public String hello() {
+        return "Hello Jenkins Pipeline";
     }
 }
