@@ -26,5 +26,13 @@ pipeline {
                 sh 'docker build -t java-jenkins-demo .'
             }
         }
+        stage('Deploy') {
+    steps {
+        sh '''
+        docker rm -f java-app || true
+        docker run -d --name java-app -p 8080:8080 java-jenkins-demo
+        '''
+    }
+}
     }
 }
