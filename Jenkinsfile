@@ -33,6 +33,22 @@ pipeline {
                 sh 'docker build -t java-jenkins-demo .'
             }
         }
+        stage('Docker Push') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-credentials',
+            usernameVariable: 'DOCKER_USERNAME',
+            passwordVariable: 'DOCKER_PASSWORD'
+        )]) {
+            sh '''
+                echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                docker tag java-jenkins-demo:latest $DOCKER_USERNAME/java-jenkins-demo:latest
+                docker push $DOCKER_USERNAME/java-jenkins-demo:latest
+                docker logout
+            '''
+        }
+    }
+}
         stage('Deploy') {
     steps {
         sh '''
