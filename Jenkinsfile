@@ -20,16 +20,12 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        node {
-  stage('SCM') {
-    checkout scm
-  }
-  stage('SonarQube Analysis') {
-    def mvn = tool 'Default Maven';
-    withSonarQubeEnv() {
-      sh "${mvn}/bin/mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-jenkins-demo -Dsonar.projectName='java-jenkins-demo'"
+        stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('SonarQube') {
+            sh 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-jenkins-demo -Dsonar.projectName=java-jenkins-demo'
+        }
     }
-  }
 }
 
         stage('Docker Build') {
