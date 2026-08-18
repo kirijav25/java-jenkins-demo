@@ -34,12 +34,11 @@ pipeline {
                 }
             }
         }
-
-        stage('OWASP Security Scan') {
-            steps {
-                sh 'mvn dependency-check:check -DossIndexAnalyzerEnabled=false'
-            }
-        }
+stage('OWASP Security Scan') {
+    steps {
+        sh 'mvn dependency-check:check -DossIndexAnalyzerEnabled=false'
+    }
+}
 
         stage('Docker Build') {
             steps {
