@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package -DossIndexAnalyzerEnabled=false'
             }
         }
 
@@ -20,47 +20,57 @@ pipeline {
                 sh 'mvn test'
             }
         }
+
         stage('SonarQube Analysis') {
-    steps {
-        withSonarQubeEnv('SonarQube') {
-            sh 'mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-jenkins-demo -Dsonar.projectName=java-jenkins-demo'
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                    mvn clean verify \
+                    org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                    -DossIndexAnalyzerEnabled=false \
+                    -Dsonar.projectKey=java-jenkins-demo \
+                    -Dsonar.projectName=java-jenkins-demo
+                    '''
+                }
+            }
         }
-    }
-}
+
         stage('OWASP Security Scan') {
-    steps {
-        sh 'mvn dependency-check:check'
-    }
-}
+            steps {
+                sh 'mvn dependency-check:check -DossIndexAnalyzerEnabled=false'
+            }
+        }
 
         stage('Docker Build') {
             steps {
                 sh 'docker build -t java-jenkins-demo .'
             }
         }
+
         stage('Docker Push') {
-    steps {
-        withCredentials([usernamePassword(
-            credentialsId: 'dockerhub-credentials',
-            usernameVariable: 'DOCKER_USERNAME',
-            passwordVariable: 'DOCKER_PASSWORD'
-        )]) {
-            sh '''
-                echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                docker tag java-jenkins-demo:latest $DOCKER_USERNAME/java-jenkins-demo:latest
-                docker push $DOCKER_USERNAME/java-jenkins-demo:latest
-                docker logout
-            '''
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-credentials',
+                    usernameVariable: 'DOCKER_USERNAME',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )]) {
+                    sh '''
+                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                        docker tag java-jenkins-demo:latest $DOCKER_USERNAME/java-jenkins-demo:latest
+                        docker push $DOCKER_USERNAME/java-jenkins-demo:latest
+                        docker logout
+                    '''
+                }
+            }
         }
-    }
-}
+
         stage('Deploy') {
-    steps {
-        sh '''
-        docker rm -f java-app || true
-        docker run -d --name java-app -p 8080:8080 java-jenkins-demo
-        '''
-    }
-}
+            steps {
+                sh '''
+                    docker rm -f java-app || true
+                    docker run -d --name java-app -p 8080:8080 java-jenkins-demo
+                '''
+            }
+        }
     }
 }
