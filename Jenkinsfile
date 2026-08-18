@@ -37,9 +37,8 @@ pipeline {
 stage('OWASP Security Scan') {
     steps {
         sh '''
-            mvn dependency-check:check \
-            -DossIndexAnalyzerEnabled=false \
-            -DfailBuildOnCVSS=11
+            mvn org.owasp:dependency-check-maven:12.1.0:check \
+            -DossIndexAnalyzerEnabled=false
         '''
     }
 }
