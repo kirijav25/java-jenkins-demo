@@ -27,6 +27,11 @@ pipeline {
         }
     }
 }
+        stage('OWASP Security Scan') {
+    steps {
+        sh 'mvn dependency-check:check'
+    }
+}
 
         stage('Docker Build') {
             steps {
