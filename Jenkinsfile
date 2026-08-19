@@ -34,13 +34,14 @@ pipeline {
             dependency-check.sh \
               --project "java-jenkins-demo" \
               --scan . \
+              --data /var/lib/dependency-check \
               --format HTML \
               --out dependency-check-report \
+              --disableOssIndex \
               --failOnCVSS 7
         '''
     }
 }
-
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
