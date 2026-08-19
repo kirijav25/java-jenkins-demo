@@ -25,6 +25,18 @@ pipeline {
                 sh 'mvn test'
             }
         }
+        stage('Dependency Check') {
+    steps {
+        sh '''
+            dependency-check.sh \
+              --project "java-jenkins-demo" \
+              --scan . \
+              --format HTML \
+              --out dependency-check-report \
+              --failOnCVSS 7
+        '''
+    }
+}
 
         stage('SonarQube Analysis') {
             steps {
