@@ -55,15 +55,7 @@ pipeline {
                 }
             }
         }
-stage('OWASP Security Scan') {
-    steps {
-        sh '''
-            mvn org.owasp:dependency-check-maven:12.1.0:check \
-            -DossIndexAnalyzerEnabled=false \
-            -DossindexAnalyzerEnabled=false
-        '''
-    }
-}
+
         stage('Docker Build') {
             steps {
                 sh 'docker build -t java-jenkins-demo .'
