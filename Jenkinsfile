@@ -16,7 +16,10 @@ pipeline {
         }
         stage('Trivy Scan') {
     steps {
-        sh 'trivy image java-jenkins-demo'
+        sh '''
+            export TMPDIR=/var/tmp/trivy
+            trivy image java-jenkins-demo
+        '''
     }
 }
 
