@@ -14,6 +14,11 @@ pipeline {
                 sh 'mvn clean package -DossIndexAnalyzerEnabled=false'
             }
         }
+        stage('Trivy Scan') {
+    steps {
+        sh 'trivy image java-jenkins-demo'
+    }
+}
 
         stage('Test') {
             steps {
