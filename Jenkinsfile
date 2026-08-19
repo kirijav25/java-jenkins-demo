@@ -28,7 +28,7 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Dependency Check') {
+      stage('Dependency Check') {
     steps {
         sh '''
             dependency-check.sh \
