@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.4.xsd"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.4.xsd https://dependency-check.github.io/DependencyCheck/dependency-suppression.1.4.xsd">
+
+    <suppress>
+        <notes><![CDATA[
+            Tomcat CVE affects the WebSocket chat example application.
+            The application JAR was checked and does not contain an examples application.
+        ]]></notes>
+        <cve>CVE-2026-66299</cve>
+    </suppress>
+
+</suppressions>

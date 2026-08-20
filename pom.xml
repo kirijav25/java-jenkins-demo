@@ -40,7 +40,8 @@
                 <version>12.1.0</version>
 
                 <configuration>
-                    <ossIndexAnalyzerEnabled>false</ossIndexAnalyzerEnabled>
+			<ossIndexAnalyzerEnabled>false</ossIndexAnalyzerEnabled>
+			  <suppressionFiles>dependency-check-suppressions.xml</suppressionFiles>
                 </configuration>
 
             </plugin>
